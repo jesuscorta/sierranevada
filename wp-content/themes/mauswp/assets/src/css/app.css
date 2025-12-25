@@ -1,0 +1,116 @@
+@source "./*.php" "./**/*.php" "./assets/src/js/**/*.js";
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Open Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Blue */
+  --color-primary-50: #eaeaf1;
+  --color-primary-75: #bebed3;
+  --color-primary-100: #2d2c72;
+  --color-primary-200: #292867;
+  --color-primary-300: #24235b;
+  --color-primary-400: #1b1a44;
+  --color-primary-500: #100f28;
+
+  /* Grey */
+  --color-light: #e9eaeb;
+  --color-light-hover: #dedfe0;
+  --color-light-active: #babcbf;
+  --color-normal: #212832;
+  --color-normal-hover: #1e242d;
+  --color-normal-active: #1a2028;
+  --color-dark: #191e26;
+  --color-dark-hover: #14181e;
+  --color-dark-active: #0f1216;
+  --color-darker: #0c0e12;
+
+  /* Second color */
+  --color-secondary-50: #e9eaeb;
+  --color-secondary-100: #dedfe0;
+  --color-secondary-200: #babcbf;
+  --color-secondary-300: #212832;
+  --color-secondary-400: #1e242d;
+  --color-secondary-500: #1a2028;
+  --color-secondary-600: #191e26;
+  --color-secondary-700: #14181e;
+  --color-secondary-800: #0f1216;
+  --color-secondary-900: #0c0e12;
+}
+
+@layer base {
+  body {
+    @apply font-sans text-neutral-900 bg-neutral-50;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+}
+
+@layer components {
+  .topbar {
+    @apply block;
+  }
+
+  .topbar-menu {
+    @apply flex items-center gap-8 text-[12px] leading-none font-display font-semibold uppercase text-neutral-50;
+  }
+
+  .topbar-menu > li {
+    @apply relative pl-5 first:pl-0;
+  }
+
+  .topbar-menu > li:not(:first-child)::before {
+    content: "";
+    @apply absolute left-0 top-1/2 h-6 -translate-y-1/2 border-l border-neutral-100/70;
+  }
+
+  .main-menu {
+    @apply flex items-center gap-10 text-[16px] leading-none font-display font-semibold text-neutral-900;
+  }
+
+  .main-menu a {
+    @apply relative inline-block px-1 py-1 text-[16px] leading-none font-display font-semibold border-b-2 border-transparent transition-all duration-200 hover:border-neutral-900 hover:text-neutral-900;
+  }
+
+  .mobile-menu {
+    @apply translate-x-full transition-transform duration-300 ease-in-out;
+  }
+
+  .mobile-menu.is-open {
+    @apply translate-x-0;
+  }
+
+  .mobile-main-menu {
+    @apply divide-y divide-neutral-200 px-0 pb-0;
+  }
+
+  .mobile-main-menu a {
+    @apply block px-6 py-4 text-[18px] font-semibold font-sans text-neutral-600;
+  }
+
+  .mobile-topbar-menu {
+    @apply grid grid-cols-2 gap-x-6 gap-y-2 text-[12px] font-display font-semibold uppercase tracking-normal text-primary-400;
+  }
+
+  .mobile-topbar-menu a {
+    @apply block py-2;
+  }
+
+  .site-header .custom-logo {
+    @apply block h-[62px] max-w-[266px] w-auto;
+  }
+
+  .mauswp-trustindex .ti-header.ti-header-grid.source-Google {
+    text-align: left !important;
+  }
+
+  .mauswp-trustindex .ti-v-center {
+    align-self: flex-start !important;
+    text-align: left !important;
+  }
+
+}
