@@ -9,8 +9,7 @@ services:
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
     volumes:
-      - ./wp-content/themes/mauswp:/var/www/html/wp-content/themes/mauswp
-      - wp_content:/var/www/html/wp-content
+      - ./wp-content:/var/www/html/wp-content
     depends_on:
       - db
     networks:
@@ -43,7 +42,6 @@ services:
 
 volumes:
   db_data:
-  wp_content:
 
 networks:
   wpnet:
