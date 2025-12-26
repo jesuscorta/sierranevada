@@ -13,6 +13,8 @@ services:
       - wp_content:/var/www/html/wp-content
     depends_on:
       - db
+    networks:
+      - wpnet
 
   db:
     image: mysql:8.0 #(Lo mismo que lo anterior)
@@ -23,6 +25,8 @@ services:
       MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - wpnet
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -34,7 +38,12 @@ services:
       PMA_HOST: db
       PMA_USER: ${WORDPRESS_DB_USER}
       PMA_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+    networks:
+      - wpnet
 
 volumes:
   db_data:
   wp_content:
+
+networks:
+  wpnet:
