@@ -21,49 +21,64 @@ services:
     image: alpine/git:2.45.2
     restart: unless-stopped
 
-    # Clave en Dokploy: anula el entrypoint por completo
+    # IMPORTANTE para Dokploy: anular entrypoint de la imagen
     entrypoint: []
 
     environment:
       MAUSWP_GIT_URL: ${MAUSWP_GIT_URL}
-      GIT_BRANCH: "main"
-      THEME_SUBPATH: "wp-content/themes/mauswp"
-      THEME_DIR: "/data/themes/mauswp"
       SYNC_INTERVAL: "300"
 
     volumes:
       - wp_content:/data
 
-    # Clave en Dokploy: command en formato array
+    # Command en formato array (Dokploy-safe)
     command:
       - "sh"
       - "-lc"
       - >
         set -eu;
+        echo "== theme_sync arrancando ==";
         mkdir -p /data/plugins /data/themes /data/uploads /data/mu-plugins /data/languages /data/upgrade;
-        if [ -z "${MAUSWP_GIT_URL:-}" ]; then echo "ERROR: MAUSWP_GIT_URL no está definida"; exit 1; fi;
+        if [ -z "${MAUSWP_GIT_URL:-}" ]; then
+          echo "ERROR: MAUSWP_GIT_URL no está definida";
+          exit 1;
+        fi;
         sync_once() {
+          echo "== Clonando repo ==";
           rm -rf /tmp/repo;
-          git clone --depth 1 --branch "$GIT_BRANCH" "$MAUSWP_GIT_URL" /tmp/repo;
-          if [ ! -f "/tmp/repo/$THEME_SUBPATH/style.css" ]; then
-            echo "ERROR: No existe /tmp/repo/$THEME_SUBPATH/style.css";
-            echo "DEBUG: listado subpath:";
-            ls -la "/tmp/repo/$THEME_SUBPATH" || true;
+          git clone --depth 1 --branch main "${MAUSWP_GIT_URL}" /tmp/repo;
+
+          if [ ! -f "/tmp/repo/wp-content/themes/mauswp/style.css" ]; then
+            echo "ERROR: No existe wp-content/themes/mauswp/style.css en el repo";
+            echo "DEBUG: contenido real:";
+            ls -la /tmp/repo/wp-content/themes || true;
             exit 1;
           fi;
+
+          echo "== Copiando theme ==";
           rm -rf /tmp/theme.new;
           mkdir -p /tmp/theme.new;
-          cp -a "/tmp/repo/$THEME_SUBPATH/." /tmp/theme.new/;
+          cp -a /tmp/repo/wp-content/themes/mauswp/. /tmp/theme.new/;
+
           chown -R 33:33 /tmp/theme.new || true;
-          rm -rf "${THEME_DIR}.bak";
-          if [ -d "$THEME_DIR" ]; then mv "$THEME_DIR" "${THEME_DIR}.bak"; fi;
-          mv /tmp/theme.new "$THEME_DIR";
-          rm -rf "${THEME_DIR}.bak";
+
+          rm -rf /data/themes/mauswp.bak;
+          if [ -d /data/themes/mauswp ]; then
+            mv /data/themes/mauswp /data/themes/mauswp.bak;
+          fi;
+
+          mv /tmp/theme.new /data/themes/mauswp;
+          rm -rf /data/themes/mauswp.bak;
+
           chown -R 33:33 /data || true;
-          echo "OK: theme sincronizado en $THEME_DIR";
+
+          echo "OK: mauswp sincronizado correctamente";
         };
         sync_once;
-        while true; do sleep "$SYNC_INTERVAL"; sync_once || true; done
+        while true; do
+          sleep "${SYNC_INTERVAL}";
+          sync_once || true;
+        done
 
     depends_on:
       - wordpress
