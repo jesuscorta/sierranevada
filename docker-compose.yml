@@ -22,14 +22,21 @@ services:
     restart: unless-stopped
     entrypoint: ["/bin/sh", "-lc"]
     environment:
-      THEME_DIR: /data/themes/mauswp
-      GIT_BRANCH: "main"
-      SYNC_MODE: "pull"        # pull | force
-      SYNC_INTERVAL: "300"     # segundos
+      # Repo "proyecto" (contiene wp-content/themes/mauswp)
       MAUSWP_GIT_URL: ${MAUSWP_GIT_URL}
+      GIT_BRANCH: "main"
+
+      # Path dentro del repo donde vive el theme (caso B)
+      THEME_SUBPATH: "wp-content/themes/mauswp"
+
+      # Destino dentro del volumen wp-content
+      THEME_DIR: "/data/themes/mauswp"
+
+      # Cada cuánto sincroniza
+      SYNC_INTERVAL: "300"
     volumes:
       - wp_content:/data
-    command: "set -eu; mkdir -p /data/plugins /data/themes /data/uploads /data/mu-plugins /data/languages /data/upgrade; if [ -z \"${MAUSWP_GIT_URL:-}\" ]; then echo \"ERROR: MAUSWP_GIT_URL no está definida\"; exit 1; fi; if [ ! -d \"$THEME_DIR/.git\" ]; then rm -rf \"$THEME_DIR\"; git clone --depth 1 --branch \"$GIT_BRANCH\" \"$MAUSWP_GIT_URL\" \"$THEME_DIR\"; else cd \"$THEME_DIR\"; git fetch --depth 1 origin \"$GIT_BRANCH\"; if [ \"$SYNC_MODE\" = \"force\" ]; then git reset --hard \"origin/$GIT_BRANCH\"; git clean -fd; else git pull --ff-only origin \"$GIT_BRANCH\"; fi; fi; chown -R 33:33 /data || true; while true; do sleep \"$SYNC_INTERVAL\"; if [ -d \"$THEME_DIR/.git\" ]; then cd \"$THEME_DIR\"; git fetch --depth 1 origin \"$GIT_BRANCH\"; if [ \"$SYNC_MODE\" = \"force\" ]; then git reset --hard \"origin/$GIT_BRANCH\"; git clean -fd; else git pull --ff-only origin \"$GIT_BRANCH\"; fi; else rm -rf \"$THEME_DIR\"; git clone --depth 1 --branch \"$GIT_BRANCH\" \"$MAUSWP_GIT_URL\" \"$THEME_DIR\"; fi; chown -R 33:33 /data || true; done"
+    command: "set -eu; mkdir -p /data/plugins /data/themes /data/uploads /data/mu-plugins /data/languages /data/upgrade; if [ -z \"${MAUSWP_GIT_URL:-}\" ]; then echo \"ERROR: MAUSWP_GIT_URL no está definida\"; exit 1; fi; sync_once(){ rm -rf /tmp/repo; git clone --depth 1 --branch \"$GIT_BRANCH\" \"$MAUSWP_GIT_URL\" /tmp/repo; if [ ! -f \"/tmp/repo/$THEME_SUBPATH/style.css\" ]; then echo \"ERROR: No existe /tmp/repo/$THEME_SUBPATH/style.css (ruta incorrecta o clone fallido)\"; ls -la \"/tmp/repo\" || true; exit 1; fi; rm -rf \"$THEME_DIR\"; mkdir -p \"$THEME_DIR\"; cp -a \"/tmp/repo/$THEME_SUBPATH/.\" \"$THEME_DIR/\"; chown -R 33:33 /data || true; echo \"OK: theme sincronizado en $THEME_DIR\"; }; sync_once; while true; do sleep \"$SYNC_INTERVAL\"; sync_once || true; done"
     depends_on:
       - wordpress
     networks:
