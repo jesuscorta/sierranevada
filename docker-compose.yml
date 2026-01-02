@@ -8,7 +8,6 @@ services:
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
-      # Recomendado en contenedores para instalar idiomas/plugins/updates sin FTP
       WORDPRESS_CONFIG_EXTRA: |
         define('FS_METHOD', 'direct');
     volumes:
@@ -18,55 +17,61 @@ services:
     networks:
       - wpnet
 
-  # Sidecar: sincroniza el theme mauswp dentro del volumen wp_content
   theme_sync:
     image: alpine/git:2.45.2
     restart: unless-stopped
+
+    # IMPORTANTE: evita que el contenedor trate el command como "git <args>"
+    entrypoint: ["/bin/sh", "-lc"]
+
     environment:
       THEME_DIR: /data/themes/mauswp
       GIT_BRANCH: main
       MAUSWP_GIT_URL: ${MAUSWP_GIT_URL}
-      # Si quieres forzar siempre el estado exacto de main, pon SYNC_MODE=force
-      SYNC_MODE: ${SYNC_MODE:-pull}
+      SYNC_MODE: ${SYNC_MODE:-pull}       # pull | force
       SYNC_INTERVAL: ${SYNC_INTERVAL:-300} # segundos
+
     volumes:
       - wp_content:/data
-    command: >
-      sh -lc '
-        set -eu;
 
-        mkdir -p /data/{plugins,themes,uploads,mu-plugins,languages,upgrade};
+    command: |
+      set -eu
 
-        # Función de sync
-        sync_repo() {
-          if [ ! -d "$THEME_DIR/.git" ]; then
-            rm -rf "$THEME_DIR";
-            git clone --depth 1 --branch "$GIT_BRANCH" "$MAUSWP_GIT_URL" "$THEME_DIR";
+      mkdir -p /data/{plugins,themes,uploads,mu-plugins,languages,upgrade}
+
+      sync_repo() {
+        if [ -z "${MAUSWP_GIT_URL:-}" ]; then
+          echo "ERROR: MAUSWP_GIT_URL no está definida"
+          exit 1
+        fi
+
+        if [ ! -d "$THEME_DIR/.git" ]; then
+          rm -rf "$THEME_DIR"
+          git clone --depth 1 --branch "$GIT_BRANCH" "$MAUSWP_GIT_URL" "$THEME_DIR"
+        else
+          cd "$THEME_DIR"
+          git fetch --depth 1 origin "$GIT_BRANCH"
+
+          if [ "${SYNC_MODE}" = "force" ]; then
+            git reset --hard "origin/$GIT_BRANCH"
+            git clean -fd
           else
-            cd "$THEME_DIR";
-            git fetch --depth 1 origin "$GIT_BRANCH";
-            if [ "${SYNC_MODE}" = "force" ]; then
-              git reset --hard "origin/$GIT_BRANCH";
-              git clean -fd;
-            else
-              git pull --ff-only origin "$GIT_BRANCH";
-            fi
+            git pull --ff-only origin "$GIT_BRANCH"
           fi
-        }
+        fi
+      }
 
-        # Primer sync
-        sync_repo;
+      sync_repo
 
-        # Permisos típicos (alineados con wordpress:apache -> www-data uid 33)
-        chown -R 33:33 /data;
+      # Permisos típicos para wordpress:apache (www-data suele ser uid/gid 33)
+      chown -R 33:33 /data || true
 
-        # Loop
-        while true; do
-          sleep "$SYNC_INTERVAL";
-          sync_repo || true;
-          chown -R 33:33 /data || true;
-        done
-      '
+      while true; do
+        sleep "$SYNC_INTERVAL"
+        sync_repo || true
+        chown -R 33:33 /data || true
+      done
+
     depends_on:
       - wordpress
     networks:
