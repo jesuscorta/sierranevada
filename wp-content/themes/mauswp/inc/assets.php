@@ -91,6 +91,31 @@ function mauswp_defer_scripts( $tag, $handle ) {
 add_filter( 'script_loader_tag', 'mauswp_defer_scripts', 10, 2 );
 
 /**
+ * Carga no bloqueante de CSS secundarios (fonts/swiper).
+ */
+function mauswp_async_styles( $html, $handle, $href, $media ) {
+	if ( 'mauswp-fonts' === $handle ) {
+		$href = esc_url( $href );
+		return sprintf(
+			'<link rel="preload" as="style" href="%1$s" onload="this.onload=null;this.rel=\'stylesheet\'">' .
+			'<noscript><link rel="stylesheet" href="%1$s"></noscript>' . "\n",
+			$href
+		);
+	}
+
+	if ( 'mauswp-swiper' === $handle ) {
+		$href = esc_url( $href );
+		return sprintf(
+			'<link rel="stylesheet" href="%s" media="print" onload="this.media=\'all\'">' . "\n",
+			$href
+		);
+	}
+
+	return $html;
+}
+add_filter( 'style_loader_tag', 'mauswp_async_styles', 10, 4 );
+
+/**
  * Desactiva scripts de emoji para ahorrar bytes.
  */
 function mauswp_disable_emojis() {
@@ -109,6 +134,30 @@ function mauswp_disable_emojis() {
 	} );
 }
 add_action( 'init', 'mauswp_disable_emojis' );
+
+/**
+ * Descarga estilos de plugins cuando no se usan en la pagina.
+ */
+function mauswp_dequeue_unused_styles() {
+	if ( is_admin() ) {
+		return;
+	}
+
+	$has_instagram = false;
+	if ( is_singular() ) {
+		$post = get_post();
+		if ( $post instanceof WP_Post ) {
+			$has_instagram = has_shortcode( $post->post_content, 'instagram-feed' )
+				|| has_shortcode( $post->post_content, 'sbi' )
+				|| has_shortcode( $post->post_content, 'sb_instagram' );
+		}
+	}
+
+	if ( ! $has_instagram ) {
+		wp_dequeue_style( 'sbi-styles' );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'mauswp_dequeue_unused_styles', 100 );
 
 /**
  * Preload de la imagen LCP cuando un bloque la define.
