@@ -48,12 +48,15 @@ $block_id = ! empty( $block['anchor'] )
 			$is_text_right = ( $row['text_position'] === 'right' );
 			$text_col      = $is_text_right ? 'md:col-span-7' : 'md:col-span-5';
 			$media_col     = $is_text_right ? 'md:col-span-5' : 'md:col-span-7';
+			$is_second_row = ( $index === 1 );
+			$text_order    = $is_second_row ? 'order-1 md:order-none' : '';
+			$media_order   = $is_second_row ? 'order-2 md:order-none' : '';
 			$row_spacing   = $index > 0 ? 'mt-10 md:mt-12' : '';
 			?>
 
 			<div class="grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-10 md:items-center <?php echo esc_attr( $row_spacing ); ?>">
 				<?php if ( ! $is_text_right ) : ?>
-					<div class="<?php echo esc_attr( $text_col ); ?>">
+					<div class="<?php echo esc_attr( trim( $text_col . ' ' . $text_order ) ); ?>">
 						<?php if ( ! empty( $row['title'] ) ) : ?>
 							<h2 class="text-5xl font-bold font-['Montserrat'] text-indigo-950 leading-tight">
 								<?php echo esc_html( $row['title'] ); ?>
@@ -69,11 +72,11 @@ $block_id = ! empty( $block['anchor'] )
 				<?php endif; ?>
 
 				<?php if ( $has_media ) : ?>
-					<div class="<?php echo esc_attr( $media_col ); ?>">
-						<div class="relative overflow-hidden rounded-[12px]">
+					<div class="<?php echo esc_attr( trim( $media_col . ' ' . $media_order . ' -mx-4 w-[calc(100%+2rem)] md:mx-0 md:w-auto' ) ); ?>">
+						<div class="relative overflow-hidden md:rounded-[12px]">
 							<?php if ( $row['media_type'] === 'video' && ! empty( $row['video_url'] ) ) : ?>
 								<video
-									class="w-full rounded-[12px]"
+									class="w-full"
 									controls
 									playsinline
 									preload="metadata"
@@ -84,7 +87,7 @@ $block_id = ! empty( $block['anchor'] )
 								<img
 									src="<?php echo esc_url( $row['image']['url'] ); ?>"
 									alt="<?php echo esc_attr( $row['image']['alt'] ); ?>"
-									class="w-full rounded-[12px] object-cover"
+									class="w-full object-cover"
 									loading="lazy"
 									decoding="async"
 								/>
@@ -103,7 +106,7 @@ $block_id = ! empty( $block['anchor'] )
 				<?php endif; ?>
 
 				<?php if ( $is_text_right ) : ?>
-					<div class="<?php echo esc_attr( $text_col ); ?>">
+					<div class="<?php echo esc_attr( trim( $text_col . ' ' . $text_order ) ); ?>">
 						<?php if ( ! empty( $row['title'] ) ) : ?>
 							<h2 class="text-5xl font-bold font-['Montserrat'] text-indigo-950 leading-tight">
 								<?php echo esc_html( $row['title'] ); ?>

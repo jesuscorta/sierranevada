@@ -67,13 +67,13 @@ foreach ( $filters as $key => $filter ) {
 ?>
 
 <section class="w-full bg-neutral-50 py-12 md:py-16" data-cat-block="<?php echo esc_attr( $block['id'] ); ?>">
-	<div class="mx-auto w-full max-w-7xl px-4">
+	<div class="mx-auto w-full max-w-7xl px-4 lg:px-8">
 		<div class="flex flex-col items-start gap-8">
 			<h2 class="text-3xl md:text-4xl font-bold font-['Montserrat'] leading-tight bg-gradient-to-r from-indigo-900 to-indigo-950 bg-clip-text text-transparent">
 				<?php echo esc_html( $block_title ); ?>
 			</h2>
 
-			<div class="flex flex-wrap items-center gap-4" data-cat-tabs role="tablist">
+			<div class="mauswp-cat-tabs-scroll flex w-full items-center gap-4 overflow-x-auto whitespace-nowrap pb-2 md:flex-wrap md:overflow-visible md:whitespace-normal" data-cat-tabs role="tablist">
 				<?php foreach ( $filters as $key => $filter ) : ?>
 					<?php
 					$is_active = ( $key === $active_key );
@@ -112,12 +112,12 @@ foreach ( $filters as $key => $filter ) {
 					>
 						<?php
 						$items = $filter['items'] ?: [];
-						$cols  = max( 1, min( 6, count( $items ) ) );
+						$cols  = max( 1, min( 5, count( $items ) ) );
 						?>
 						<?php if ( $items ) : ?>
 							<div
-								class="mt-6 grid w-full gap-6"
-								style="grid-template-columns: repeat(<?php echo (int) $cols; ?>, minmax(0,1fr));"
+								class="mauswp-cat-grid mt-6 w-full gap-6"
+								style="--mauswp-cat-cols: <?php echo (int) $cols; ?>;"
 							>
 								<?php foreach ( $items as $item ) : ?>
 									<?php
@@ -125,14 +125,14 @@ foreach ( $filters as $key => $filter ) {
 									$image  = $item['image'] ?? null;
 									$link   = $item['link'] ?? '';
 									?>
-									<a href="<?php echo esc_url( $link ?: '#' ); ?>" class="block rounded-[16px] border border-neutral-300 bg-white p-4 transition hover:border-primary-400 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300">
+									<a href="<?php echo esc_url( $link ?: '#' ); ?>" class="block rounded-[16px] border border-slate-500 bg-white p-4 transition hover:border-primary-400 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300">
 										<div class="overflow-hidden rounded-[14px] border border-neutral-200">
 											<?php if ( $image ) : ?>
 												<img src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['alt'] ); ?>" class="h-48 w-full object-cover" loading="lazy" decoding="async" />
 											<?php endif; ?>
 										</div>
 										<div class="mt-4 flex items-center justify-between">
-											<p class="font-display text-xl font-bold text-neutral-900"><?php echo esc_html( $title ); ?></p>
+											<p class="font-['Open_Sans'] text-base font-bold text-gray-800 md:text-lg"><?php echo esc_html( $title ); ?></p>
 											<span class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-neutral-500 text-neutral-800 transition hover:border-primary-400 hover:text-primary-400">
 												<?php echo $icons_default['arrow']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 											</span>

@@ -40,9 +40,9 @@ $card_bg_attr = $bg_url
 ?>
 
 <section id="<?php echo esc_attr( $block_id ); ?>" class="py-10 md:py-16 <?php echo esc_attr( $block_class ); ?>">
-	<div class="container mx-auto px-4">
+	<div class="mx-auto w-full max-w-7xl px-4 lg:px-8">
 		<div
-			class="js-hero-timeline-slider relative rounded-[28px] overflow-hidden text-white bg-slate-900 bg-cover bg-center bg-no-repeat"
+			class="js-hero-timeline-slider relative -mx-4 w-[calc(100%+2rem)] rounded-none overflow-hidden text-white bg-slate-900 bg-cover bg-center bg-no-repeat md:mx-0 md:w-auto md:rounded-[28px]"
 			<?php echo $card_bg_attr; ?>
 		>
 
@@ -79,14 +79,14 @@ $card_bg_attr = $bg_url
 							<?php foreach ( $slides as $slide ) :
 								$text = $slide['text'] ?? '';
 								?>
-								<div class="swiper-slide h-[400px] min-h-[400px] max-h-[400px]">
+								<div class="swiper-slide h-[240px] min-h-[240px] max-h-[240px] md:h-[400px] md:min-h-[400px] md:max-h-[400px]">
 									<div class="flex h-full items-center justify-center px-6 md:px-16 py-10">
 										<div
 											class="hero-slide-content w-full max-w-full md:max-w-3xl text-left sm:text-center opacity-0 translate-y-3 transition-all duration-500 ease-out"
 											data-hero-slide-content
 										>
 											<?php if ( $text ) : ?>
-												<p class="text-3xl font-medium font-['Montserrat']">
+												<p class="text-base font-medium font-['Montserrat'] leading-5 text-slate-50 md:text-3xl md:leading-relaxed [&_strong]:font-bold">
 													<?php echo wp_kses_post( $text ); ?>
 												</p>
 											<?php endif; ?>
