@@ -14,19 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Assets mínimos para el carrusel (Swiper).
-wp_enqueue_style(
-	'mauswp-swiper',
-	'https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css',
-	[],
-	'9.4.1'
-);
-wp_enqueue_script(
-	'mauswp-swiper',
-	'https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js',
-	[],
-	'9.4.1',
-	true
-);
+wp_enqueue_style( 'mauswp-swiper' );
+wp_enqueue_script( 'mauswp-swiper' );
 
 /**
  * Ajusta esto si tu campo ACF del estado usa otro name o valores.

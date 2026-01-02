@@ -17,9 +17,26 @@ $subtitle_bottom   = get_field('subtitle_bottom');
 $cta_text          = get_field('cta_text');
 $cta_url           = get_field('cta_url');
 $cta_target        = get_field('cta_target') ? '_blank' : '_self';
-$poster_image      = null;
+$background_image_id     = 0;
+$background_image_url    = '';
+$background_image_width  = 0;
+$background_image_height = 0;
+
 if ( $background_image ) {
-	$poster_image = is_array( $background_image ) ? $background_image['url'] : $background_image;
+	if ( is_array( $background_image ) ) {
+		$background_image_id     = isset( $background_image['ID'] ) ? (int) $background_image['ID'] : 0;
+		$background_image_url    = isset( $background_image['url'] ) ? $background_image['url'] : '';
+		$background_image_width  = isset( $background_image['width'] ) ? (int) $background_image['width'] : 0;
+		$background_image_height = isset( $background_image['height'] ) ? (int) $background_image['height'] : 0;
+	} else {
+		$background_image_url = $background_image;
+	}
+}
+
+$poster_image = $background_image_url ?: null;
+
+if ( ! empty( $background_image_url ) && empty( $GLOBALS['mauswp_lcp_image'] ) ) {
+	$GLOBALS['mauswp_lcp_image'] = $background_image_url;
 }
 
 // ID y clases del bloque
@@ -46,14 +63,39 @@ $classes  = 'relative w-full overflow-hidden';
 				playsinline
 				data-hero-video="<?php echo esc_attr( $block_id ); ?>"
 			></video>
-		<?php elseif ( $background_image ) : ?>
+		<?php elseif ( $background_image_url ) : ?>
 			<?php
-			$img_url = is_array( $background_image ) ? $background_image['url'] : $background_image;
+			if ( $background_image_id ) {
+				echo wp_get_attachment_image(
+					$background_image_id,
+					'full',
+					false,
+					[
+						'class'         => 'absolute inset-0 h-full w-full object-cover',
+						'alt'           => '',
+						'loading'       => 'eager',
+						'fetchpriority' => 'high',
+						'decoding'      => 'async',
+						'aria-hidden'   => 'true',
+						'sizes'         => '100vw',
+					]
+				);
+			} else {
+				$dimension_attr = '';
+				if ( $background_image_width && $background_image_height ) {
+					$dimension_attr = sprintf(
+						' width="%d" height="%d"',
+						$background_image_width,
+						$background_image_height
+					);
+				}
+				printf(
+					'<img class="absolute inset-0 h-full w-full object-cover" src="%s" alt="" loading="eager" fetchpriority="high" decoding="async" aria-hidden="true"%s />',
+					esc_url( $background_image_url ),
+					$dimension_attr
+				);
+			}
 			?>
-			<div
-				class="absolute inset-0 bg-center bg-cover"
-				style="background-image:url('<?php echo esc_url( $img_url ); ?>');"
-			></div>
 		<?php endif; ?>
 
 		<!-- Overlay degradado -->
