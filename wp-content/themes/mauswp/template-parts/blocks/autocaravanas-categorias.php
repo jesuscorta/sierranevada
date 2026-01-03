@@ -116,7 +116,7 @@ foreach ( $filters as $key => $filter ) {
 						?>
 						<?php if ( $items ) : ?>
 							<div
-								class="mauswp-cat-grid mt-6 w-full gap-6"
+								class="grid grid-cols-2 mt-6 w-full gap-6 md:[grid-template-columns:repeat(var(--mauswp-cat-cols,1),minmax(0,1fr))]"
 								style="--mauswp-cat-cols: <?php echo (int) $cols; ?>;"
 							>
 								<?php foreach ( $items as $item ) : ?>
