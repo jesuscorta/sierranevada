@@ -65,8 +65,21 @@ if ( $video_youtube ) {
 	}
 }
 
-// Prioriza imagen principal (si no hay, usa placeholder).
-$main_media = $media_items[0] ?? null;
+// Prioriza imagen principal (si no hay, usa video o placeholder).
+$main_media = null;
+if ( $media_items ) {
+	$image_first = null;
+	$video_first = null;
+	foreach ( $media_items as $item ) {
+		if ( 'image' === ( $item['type'] ?? 'image' ) && ! $image_first ) {
+			$image_first = $item;
+		}
+		if ( 'video' === ( $item['type'] ?? '' ) && ! $video_first ) {
+			$video_first = $item;
+		}
+	}
+	$main_media = $image_first ?: $video_first ?: $media_items[0];
+}
 $thumb_items = $media_items;
 if ( $media_items ) {
 	$videos = array_filter(
@@ -310,33 +323,36 @@ $placeholder = get_template_directory_uri() . '/assets/img/img-placeholder.png';
 /**
  * Convierte URL de YouTube a embed y thumb.
  */
-function mauswp_convert_youtube_embed( string $url ): array {
-	$video_id = '';
-	$parsed   = wp_parse_url( $url );
+if ( ! function_exists( 'mauswp_convert_youtube_embed' ) ) {
+	function mauswp_convert_youtube_embed( string $url ): array {
+		$video_id = '';
+		$parsed   = wp_parse_url( $url );
 
-	if ( empty( $parsed['host'] ) ) {
-		return [];
-	}
+		if ( empty( $parsed['host'] ) ) {
+			return [];
+		}
 
-	if ( strpos( $parsed['host'], 'youtu.be' ) !== false && ! empty( $parsed['path'] ) ) {
-		$video_id = ltrim( $parsed['path'], '/' );
-	} elseif ( strpos( $parsed['host'], 'youtube.com' ) !== false ) {
-		if ( ! empty( $parsed['path'] ) && strpos( $parsed['path'], '/embed/' ) === 0 ) {
-			$video_id = basename( $parsed['path'] );
-		} elseif ( ! empty( $parsed['query'] ) ) {
-			parse_str( $parsed['query'], $qs );
-			if ( ! empty( $qs['v'] ) ) {
-				$video_id = $qs['v'];
+		if ( strpos( $parsed['host'], 'youtu.be' ) !== false && ! empty( $parsed['path'] ) ) {
+			$video_id = ltrim( $parsed['path'], '/' );
+		} elseif ( strpos( $parsed['host'], 'youtube.com' ) !== false ) {
+			if ( ! empty( $parsed['path'] ) && strpos( $parsed['path'], '/embed/' ) === 0 ) {
+				$video_id = basename( $parsed['path'] );
+			} elseif ( ! empty( $parsed['query'] ) ) {
+				$qs = [];
+				parse_str( $parsed['query'], $qs );
+				if ( ! empty( $qs['v'] ) ) {
+					$video_id = $qs['v'];
+				}
 			}
 		}
-	}
 
-	if ( ! $video_id ) {
-		return [];
-	}
+		if ( ! $video_id ) {
+			return [];
+		}
 
-	return [
-		'embed' => sprintf( 'https://www.youtube.com/embed/%s?rel=0', rawurlencode( $video_id ) ),
-		'thumb' => sprintf( 'https://img.youtube.com/vi/%s/hqdefault.jpg', rawurlencode( $video_id ) ),
-	];
+		return [
+			'embed' => sprintf( 'https://www.youtube.com/embed/%s?rel=0', rawurlencode( $video_id ) ),
+			'thumb' => sprintf( 'https://img.youtube.com/vi/%s/hqdefault.jpg', rawurlencode( $video_id ) ),
+		];
+	}
 }
