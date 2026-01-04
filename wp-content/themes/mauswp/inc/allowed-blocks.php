@@ -12,6 +12,7 @@ function mauswp_allowed_blocks() {
         'acf/que-dicen-de-nosotros',
         'acf/slider-texto-banner',
         'acf/contactanos',
+        'acf/autocaravanas-grid',
     ];
 }
 

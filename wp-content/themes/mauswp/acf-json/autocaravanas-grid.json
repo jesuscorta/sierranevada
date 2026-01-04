@@ -1,0 +1,103 @@
+{
+    "key": "group_mauswp_autocaravanas_grid",
+    "title": "Bloque Autocaravanas Grid",
+    "fields": [
+        {
+            "key": "field_mauswp_grid_mostrar_filtros",
+            "label": "Mostrar filtros",
+            "name": "mostrar_filtros",
+            "type": "true_false",
+            "instructions": "Si está activado, solo se muestra el botón de filtros (configuración de filtros se aplicará más adelante).",
+            "default_value": 1,
+            "ui": 1
+        },
+        {
+            "key": "field_mauswp_grid_filtro_tipo",
+            "label": "Filtrar por tipo",
+            "name": "filtro_tipo",
+            "type": "text",
+            "instructions": "Introduce el valor exacto del campo \"tipo\" del CPT. Déjalo vacío para mostrar todos.",
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_mauswp_grid_mostrar_filtros",
+                        "operator": "==",
+                        "value": "0"
+                    }
+                ]
+            ]
+        },
+        {
+            "key": "field_mauswp_grid_filtro_plazas",
+            "label": "Filtrar por plazas",
+            "name": "filtro_plazas",
+            "type": "text",
+            "instructions": "Introduce el valor exacto del campo \"plazas\". Déjalo vacío para mostrar todos.",
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_mauswp_grid_mostrar_filtros",
+                        "operator": "==",
+                        "value": "0"
+                    }
+                ]
+            ]
+        },
+        {
+            "key": "field_mauswp_grid_filtro_motor",
+            "label": "Filtrar por motor",
+            "name": "filtro_motor",
+            "type": "text",
+            "instructions": "Introduce el valor exacto del campo \"motor\". Déjalo vacío para mostrar todos.",
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_mauswp_grid_mostrar_filtros",
+                        "operator": "==",
+                        "value": "0"
+                    }
+                ]
+            ]
+        },
+        {
+            "key": "field_mauswp_grid_filtro_marca",
+            "label": "Filtrar por marca",
+            "name": "filtro_marca",
+            "type": "text",
+            "instructions": "Introduce el valor exacto del campo \"marca\". Déjalo vacío para mostrar todos.",
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_mauswp_grid_mostrar_filtros",
+                        "operator": "==",
+                        "value": "0"
+                    }
+                ]
+            ]
+        },
+        {
+            "key": "field_mauswp_grid_incluir_vendidas",
+            "label": "Incluir autocaravanas vendidas",
+            "name": "incluir_vendidas",
+            "type": "true_false",
+            "instructions": "Si está desactivado, se ocultarán las que tengan estado \"vendida\".",
+            "default_value": 0,
+            "ui": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "acf/autocaravanas-grid"
+            }
+        ]
+    ],
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "show_in_rest": 0
+}

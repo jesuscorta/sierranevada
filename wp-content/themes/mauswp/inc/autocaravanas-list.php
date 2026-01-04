@@ -16,6 +16,60 @@ require_once get_template_directory() . '/inc/autocaravanas-card.php';
 function mauswp_ajax_autocaravanas_load_more() {
 	$offset   = isset( $_GET['offset'] ) ? max( 0, (int) $_GET['offset'] ) : 0;
 	$per_page = isset( $_GET['per_page'] ) ? max( 1, (int) $_GET['per_page'] ) : 8;
+	$tipo     = isset( $_GET['tipo'] ) ? sanitize_text_field( wp_unslash( $_GET['tipo'] ) ) : '';
+	$plazas   = isset( $_GET['plazas'] ) ? sanitize_text_field( wp_unslash( $_GET['plazas'] ) ) : '';
+	$motor    = isset( $_GET['motor'] ) ? sanitize_text_field( wp_unslash( $_GET['motor'] ) ) : '';
+	$marca    = isset( $_GET['marca'] ) ? sanitize_text_field( wp_unslash( $_GET['marca'] ) ) : '';
+	$hide_sold = isset( $_GET['hide_sold'] ) ? (bool) intval( $_GET['hide_sold'] ) : false;
+
+	$meta_query = [ 'relation' => 'AND' ];
+
+	if ( $tipo ) {
+		$meta_query[] = [
+			'key'     => 'tipo',
+			'value'   => $tipo,
+			'compare' => '=',
+		];
+	}
+
+	if ( $plazas ) {
+		$meta_query[] = [
+			'key'     => 'plazas',
+			'value'   => $plazas,
+			'compare' => '=',
+		];
+	}
+
+	if ( $motor ) {
+		$meta_query[] = [
+			'key'     => 'motor',
+			'value'   => $motor,
+			'compare' => '=',
+		];
+	}
+
+	if ( $marca ) {
+		$meta_query[] = [
+			'key'     => 'marca',
+			'value'   => $marca,
+			'compare' => '=',
+		];
+	}
+
+	if ( $hide_sold ) {
+		$meta_query[] = [
+			'relation' => 'OR',
+			[
+				'key'     => 'estado',
+				'compare' => 'NOT EXISTS',
+			],
+			[
+				'key'     => 'estado',
+				'value'   => 'vendida',
+				'compare' => '!=',
+			],
+		];
+	}
 
 	$query = new WP_Query(
 		[
@@ -24,6 +78,7 @@ function mauswp_ajax_autocaravanas_load_more() {
 			'offset'         => $offset,
 			'orderby'        => 'date',
 			'order'          => 'DESC',
+			'meta_query'     => $meta_query,
 		]
 	);
 

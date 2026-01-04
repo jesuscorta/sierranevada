@@ -233,57 +233,69 @@ const initAutocaravanasCategorias = () => {
 };
 
 const initAutocaravanasLoadMore = () => {
-  const container = document.querySelector('[data-autos-grid]');
-  if (!container) return;
+  const containers = document.querySelectorAll('[data-autos-grid]');
+  if (!containers.length) return;
 
-  const loadMoreBtn = document.querySelector('[data-autos-load-more]');
-  const ajaxUrl = container.dataset.ajaxUrl;
-  const perPage = Number(container.dataset.perPage || 6);
-  let offset = Number(container.dataset.offset || 0);
-  const total = Number(container.dataset.total || 0);
-  let loading = false;
+  containers.forEach((container) => {
+    const loadMoreBtn = container.parentElement?.querySelector('[data-autos-load-more]');
+    const ajaxUrl = container.dataset.ajaxUrl;
+    const perPage = Number(container.dataset.perPage || 6);
+    let offset = Number(container.dataset.offset || 0);
+    const total = Number(container.dataset.total || 0);
+    const filterTipo = container.dataset.filterTipo || '';
+    const filterPlazas = container.dataset.filterPlazas || '';
+    const filterMotor = container.dataset.filterMotor || '';
+    const filterMarca = container.dataset.filterMarca || '';
+    const hideSold = container.dataset.hideSold || '';
+    let loading = false;
 
-  if (!ajaxUrl || !loadMoreBtn) return;
+    if (!ajaxUrl || !loadMoreBtn) return;
 
-  const setIdleState = () => {
-    loadMoreBtn.disabled = false;
-    loadMoreBtn.classList.remove('opacity-70', 'cursor-not-allowed');
-    loadMoreBtn.innerHTML =
-      '<span>Mostrar más</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>';
-  };
+    const setIdleState = () => {
+      loadMoreBtn.disabled = false;
+      loadMoreBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+      loadMoreBtn.innerHTML =
+        '<span>Mostrar más</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>';
+    };
 
-  loadMoreBtn.addEventListener('click', () => {
-    if (loading) return;
-    loading = true;
-    loadMoreBtn.disabled = true;
-    loadMoreBtn.classList.add('opacity-70', 'cursor-not-allowed');
-    loadMoreBtn.innerHTML =
-      '<svg class="h-5 w-5 animate-spin text-white" viewBox="0 0 24 24" fill="none"><circle class="opacity-30" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path class="opacity-80" d="M22 12a10 10 0 0 1-10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>';
+    loadMoreBtn.addEventListener('click', () => {
+      if (loading) return;
+      loading = true;
+      loadMoreBtn.disabled = true;
+      loadMoreBtn.classList.add('opacity-70', 'cursor-not-allowed');
+      loadMoreBtn.innerHTML =
+        '<svg class="h-5 w-5 animate-spin text-white" viewBox="0 0 24 24" fill="none"><circle class="opacity-30" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path class="opacity-80" d="M22 12a10 10 0 0 1-10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>';
 
-    const url = new URL(ajaxUrl);
-    url.searchParams.set('action', 'mauswp_autocaravanas_load_more');
-    url.searchParams.set('offset', offset);
-    url.searchParams.set('per_page', perPage);
+      const url = new URL(ajaxUrl);
+      url.searchParams.set('action', 'mauswp_autocaravanas_load_more');
+      url.searchParams.set('offset', offset);
+      url.searchParams.set('per_page', perPage);
+      if (filterTipo) url.searchParams.set('tipo', filterTipo);
+      if (filterPlazas) url.searchParams.set('plazas', filterPlazas);
+      if (filterMotor) url.searchParams.set('motor', filterMotor);
+      if (filterMarca) url.searchParams.set('marca', filterMarca);
+      if (hideSold) url.searchParams.set('hide_sold', hideSold);
 
-    fetch(url.toString(), { credentials: 'same-origin' })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success && data.data?.html) {
-          container.insertAdjacentHTML('beforeend', data.data.html);
-          offset += perPage;
-          if (!data.data.has_more || offset >= total) {
-            loadMoreBtn.remove();
+      fetch(url.toString(), { credentials: 'same-origin' })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.data?.html) {
+            container.insertAdjacentHTML('beforeend', data.data.html);
+            offset += perPage;
+            if (!data.data.has_more || offset >= total) {
+              loadMoreBtn.remove();
+            } else {
+              setIdleState();
+            }
           } else {
             setIdleState();
           }
-        } else {
-          setIdleState();
-        }
-      })
-      .catch(() => setIdleState())
-      .finally(() => {
-        loading = false;
-      });
+        })
+        .catch(() => setIdleState())
+        .finally(() => {
+          loading = false;
+        });
+    });
   });
 };
 

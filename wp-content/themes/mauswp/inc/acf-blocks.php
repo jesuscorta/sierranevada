@@ -166,5 +166,22 @@ function mauswp_register_acf_blocks() {
 			'anchor' => true,
 		],
 	] );
+
+	acf_register_block_type( [
+		'name'            => 'autocaravanas-grid',
+		'title'           => __( 'Autocaravanas grid', 'mauswp' ),
+		'description'     => __( 'Grid de autocaravanas con filtros configurables', 'mauswp' ),
+		'render_template' => 'template-parts/blocks/autocaravanas-grid.php',
+		'category'        => 'common',
+		'icon'            => 'grid-view',
+		'keywords'        => [ 'autocaravanas', 'grid', 'listado' ],
+		'mode'            => 'edit',
+		'supports'        => [
+			'align'  => false,
+			'mode'   => false,
+			'jsx'    => false,
+			'anchor' => true,
+		],
+	] );
 }
 add_action( 'acf/init', 'mauswp_register_acf_blocks' );
