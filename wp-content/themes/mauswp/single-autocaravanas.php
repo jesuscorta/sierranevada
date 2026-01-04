@@ -7,6 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+wp_enqueue_style( 'mauswp-swiper' );
+wp_enqueue_script( 'mauswp-swiper' );
+
 get_header();
 
 $post_id = get_the_ID();
@@ -96,46 +99,51 @@ $placeholder = get_template_directory_uri() . '/assets/img/img-placeholder.png';
 
 			<div class="grid grid-cols-1 gap-6 lg:grid-cols-12">
 				<div class="space-y-6 lg:col-span-7">
-					<div class="space-y-3">
+					<div class="space-y-3" data-auto-gallery>
 						<div class="overflow-hidden rounded-2xl bg-white shadow-md">
-							<div class="relative aspect-[16/9] bg-slate-100" data-auto-main-media>
-								<?php if ( $main_media ) : ?>
-									<?php if ( 'video' === $main_media['type'] ) : ?>
-										<iframe class="h-full w-full" src="<?php echo esc_url( $main_media['url'] ); ?>" allowfullscreen loading="lazy"></iframe>
+							<div class="swiper js-auto-gallery-main relative aspect-[16/9] bg-slate-100">
+								<div class="swiper-wrapper">
+									<?php if ( $media_items ) : ?>
+										<?php foreach ( $media_items as $media ) : ?>
+											<div class="swiper-slide">
+												<?php if ( 'video' === $media['type'] ) : ?>
+													<div class="h-full w-full">
+														<iframe class="h-full w-full" src="<?php echo esc_url( $media['url'] ); ?>" allowfullscreen loading="lazy"></iframe>
+													</div>
+												<?php else : ?>
+													<img src="<?php echo esc_url( $media['url'] ); ?>" alt="<?php echo esc_attr( $media['alt'] ); ?>" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+												<?php endif; ?>
+											</div>
+										<?php endforeach; ?>
 									<?php else : ?>
-										<img src="<?php echo esc_url( $main_media['url'] ); ?>" alt="<?php echo esc_attr( $main_media['alt'] ); ?>" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+										<div class="swiper-slide">
+											<img src="<?php echo esc_url( $placeholder ); ?>" alt="" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+										</div>
 									<?php endif; ?>
-								<?php else : ?>
-									<img src="<?php echo esc_url( $placeholder ); ?>" alt="" class="h-full w-full object-cover" loading="lazy" decoding="async" />
-								<?php endif; ?>
+								</div>
 							</div>
 						</div>
 
 						<?php if ( $media_items ) : ?>
-							<div class="flex items-center gap-3 overflow-x-auto">
-								<?php foreach ( $media_items as $index => $media ) : ?>
-									<button
-										type="button"
-										class="relative h-20 w-32 flex-shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-white transition hover:border-[#1A2250]"
-										data-auto-thumb
-										data-type="<?php echo esc_attr( $media['type'] ); ?>"
-										data-url="<?php echo esc_url( $media['url'] ); ?>"
-										data-alt="<?php echo esc_attr( $media['alt'] ?? get_the_title( $post_id ) ); ?>"
-									>
-										<?php if ( 'video' === $media['type'] ) : ?>
-											<span class="absolute inset-0 flex items-center justify-center bg-slate-900/30 text-white">
-												<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-											</span>
-										<?php endif; ?>
-										<?php if ( 'image' === $media['type'] && ! empty( $media['thumb'] ) ) : ?>
-											<img src="<?php echo esc_url( $media['thumb'] ); ?>" alt="<?php echo esc_attr( $media['alt'] ?? '' ); ?>" class="h-full w-full object-cover" loading="lazy" decoding="async" />
-										<?php elseif ( 'image' === $media['type'] ) : ?>
-											<img src="<?php echo esc_url( $media['url'] ); ?>" alt="<?php echo esc_attr( $media['alt'] ?? '' ); ?>" class="h-full w-full object-cover" loading="lazy" decoding="async" />
-										<?php else : ?>
-											<div class="h-full w-full bg-slate-200"></div>
-										<?php endif; ?>
-									</button>
-								<?php endforeach; ?>
+							<div class="swiper js-auto-gallery-thumbs">
+								<div class="swiper-wrapper">
+									<?php foreach ( $media_items as $media ) : ?>
+										<div class="swiper-slide !w-auto">
+											<div class="relative h-20 w-32 overflow-hidden rounded-lg border border-slate-200 bg-white">
+												<?php if ( 'video' === $media['type'] ) : ?>
+													<span class="absolute inset-0 z-10 flex items-center justify-center bg-slate-900/40 text-white">
+														<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+													</span>
+													<div class="h-full w-full bg-slate-200"></div>
+												<?php elseif ( ! empty( $media['thumb'] ) ) : ?>
+													<img src="<?php echo esc_url( $media['thumb'] ); ?>" alt="<?php echo esc_attr( $media['alt'] ?? '' ); ?>" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+												<?php else : ?>
+													<img src="<?php echo esc_url( $media['url'] ); ?>" alt="<?php echo esc_attr( $media['alt'] ?? '' ); ?>" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+												<?php endif; ?>
+											</div>
+										</div>
+									<?php endforeach; ?>
+								</div>
 							</div>
 						<?php endif; ?>
 					</div>
