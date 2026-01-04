@@ -24,7 +24,7 @@ $incluir_vendidas = (bool) get_field( 'incluir_vendidas' );
 
 $hide_sold = ! $incluir_vendidas;
 
-$meta_query = [ 'relation' => 'AND' ];
+$meta_query = [];
 
 if ( $filter_tipo ) {
 	$meta_query[] = [
@@ -72,6 +72,8 @@ if ( $hide_sold ) {
 		],
 	];
 }
+
+$meta_query = $meta_query ? array_merge( [ 'relation' => 'AND' ], $meta_query ) : [];
 
 $initial_per_page = 12;
 $load_more_per    = 6;

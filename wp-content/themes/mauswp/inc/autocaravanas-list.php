@@ -22,7 +22,7 @@ function mauswp_ajax_autocaravanas_load_more() {
 	$marca    = isset( $_GET['marca'] ) ? sanitize_text_field( wp_unslash( $_GET['marca'] ) ) : '';
 	$hide_sold = isset( $_GET['hide_sold'] ) ? (bool) intval( $_GET['hide_sold'] ) : false;
 
-	$meta_query = [ 'relation' => 'AND' ];
+	$meta_query = [];
 
 	if ( $tipo ) {
 		$meta_query[] = [
@@ -69,6 +69,10 @@ function mauswp_ajax_autocaravanas_load_more() {
 				'compare' => '!=',
 			],
 		];
+	}
+
+	if ( $meta_query ) {
+		$meta_query = array_merge( [ 'relation' => 'AND' ], $meta_query );
 	}
 
 	$query = new WP_Query(
