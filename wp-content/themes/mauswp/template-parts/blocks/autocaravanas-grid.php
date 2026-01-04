@@ -28,7 +28,7 @@ $meta_query = [ 'relation' => 'AND' ];
 
 if ( $filter_tipo ) {
 	$meta_query[] = [
-		'key'     => 'tipo',
+		'key'     => 'tipo_autocaravana',
 		'value'   => $filter_tipo,
 		'compare' => '=',
 	];
@@ -36,7 +36,7 @@ if ( $filter_tipo ) {
 
 if ( $filter_plazas ) {
 	$meta_query[] = [
-		'key'     => 'plazas',
+		'key'     => 'plazas_viajar',
 		'value'   => $filter_plazas,
 		'compare' => '=',
 	];

@@ -26,7 +26,7 @@ function mauswp_ajax_autocaravanas_load_more() {
 
 	if ( $tipo ) {
 		$meta_query[] = [
-			'key'     => 'tipo',
+			'key'     => 'tipo_autocaravana',
 			'value'   => $tipo,
 			'compare' => '=',
 		];
@@ -34,7 +34,7 @@ function mauswp_ajax_autocaravanas_load_more() {
 
 	if ( $plazas ) {
 		$meta_query[] = [
-			'key'     => 'plazas',
+			'key'     => 'plazas_viajar',
 			'value'   => $plazas,
 			'compare' => '=',
 		];
