@@ -103,8 +103,8 @@ $footer_social = [
 		</div>
 
 		<div class="mt-10 border-t border-slate-500/40 pt-6">
-			<div class="grid gap-6 md:grid-cols-12 md:items-center">
-				<div class="text-sm text-slate-200 md:col-span-10">
+			<div class="grid grid-cols-1 gap-6 md:[grid-template-columns:10fr_2fr] md:items-center">
+				<div class="text-sm text-slate-200">
 					<?php
 					if ( $footer_bottom_text ) {
 						echo wp_kses_post( wpautop( $footer_bottom_text ) );
@@ -119,7 +119,7 @@ $footer_social = [
 					<?php
 					$legal_menu = mauswp_render_footer_menu(
 						'footer_legal',
-						'mt-3 flex flex-wrap items-center text-sm text-slate-200'
+						'mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-slate-200'
 					);
 					if ( $legal_menu ) {
 						echo wp_kses_post( $legal_menu );
@@ -128,7 +128,7 @@ $footer_social = [
 				</div>
 
 				<?php if ( array_filter( $footer_social ) ) : ?>
-					<div class="flex items-center gap-4 md:col-span-2 md:justify-end">
+					<div class="flex items-center gap-4 md:justify-end">
 						<?php if ( ! empty( $footer_social['facebook'] ) ) : ?>
 							<a href="<?php echo esc_url( $footer_social['facebook'] ); ?>" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-500 text-slate-100 transition hover:border-slate-200 hover:text-slate-50" aria-label="<?php esc_attr_e( 'Facebook', 'mauswp' ); ?>">
 								<svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12.073C22 6.505 17.523 2 12 2S2 6.505 2 12.073c0 5.017 3.657 9.184 8.438 9.878v-6.988H7.898v-2.89h2.54V9.845c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.196 2.238.196v2.46h-1.26c-1.243 0-1.631.776-1.631 1.571v1.888h2.773l-.443 2.89h-2.33v6.988C18.343 21.257 22 17.09 22 12.073Z"/></svg>
