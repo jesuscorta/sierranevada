@@ -4,19 +4,71 @@
     "fields": [
         {
             "key": "field_mauswp_grid_mostrar_filtros",
-            "label": "Mostrar filtros",
-            "name": "mostrar_filtros",
+            "label": "Mostrar botón filtros",
+            "name": "mostrar_boton_filtros",
             "type": "true_false",
-            "instructions": "Si está activado, solo se muestra el botón de filtros (configuración de filtros se aplicará más adelante).",
-            "default_value": 1,
+            "instructions": "Activa o desactiva el botón “Filtros” en el front. Si está desactivado, configura filtros por defecto abajo.",
+            "default_value": 0,
             "ui": 1
+        },
+        {
+            "key": "field_mauswp_grid_activar_tipo",
+            "label": "Usar filtro Tipo",
+            "name": "activar_filtro_tipo",
+            "type": "true_false",
+            "instructions": "Activa para aplicar un tipo por defecto.",
+            "default_value": 0,
+            "ui": 1,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_mauswp_grid_mostrar_filtros",
+                        "operator": "==",
+                        "value": "0"
+                    }
+                ]
+            ]
         },
         {
             "key": "field_mauswp_grid_filtro_tipo",
             "label": "Filtrar por tipo",
             "name": "filtro_tipo",
-            "type": "text",
-            "instructions": "Introduce el valor exacto del campo \"tipo\" del CPT. Déjalo vacío para mostrar todos.",
+            "type": "select",
+            "instructions": "Elige un tipo o deja “Todos”.",
+            "choices": {
+                "": "Todos",
+                "camper": "Camper",
+                "capuchina": "Capuchina",
+                "integral": "Integral",
+                "perfilada": "Perfilada"
+            },
+            "default_value": "",
+            "ui": 1,
+            "ajax": 0,
+            "return_format": "value",
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_mauswp_grid_mostrar_filtros",
+                        "operator": "==",
+                        "value": "0"
+                    },
+                    {
+                        "field": "field_mauswp_grid_activar_tipo",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ]
+        },
+        {
+            "key": "field_mauswp_grid_activar_plazas",
+            "label": "Usar filtro Plazas viajar",
+            "name": "activar_filtro_plazas",
+            "type": "true_false",
+            "instructions": "Activa para aplicar plazas por defecto.",
+            "default_value": 0,
+            "ui": 1,
             "conditional_logic": [
                 [
                     {
@@ -29,10 +81,45 @@
         },
         {
             "key": "field_mauswp_grid_filtro_plazas",
-            "label": "Filtrar por plazas",
+            "label": "Filtrar por plazas viajar",
             "name": "filtro_plazas",
-            "type": "text",
-            "instructions": "Introduce el valor exacto del campo \"plazas\". Déjalo vacío para mostrar todos.",
+            "type": "select",
+            "instructions": "Elige plazas o deja “Todos”.",
+            "choices": {
+                "": "Todos",
+                "4": "4",
+                "5": "5",
+                "6": "6",
+                "7": "7",
+                "8": "8"
+            },
+            "default_value": "",
+            "ui": 1,
+            "ajax": 0,
+            "return_format": "value",
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_mauswp_grid_mostrar_filtros",
+                        "operator": "==",
+                        "value": "0"
+                    },
+                    {
+                        "field": "field_mauswp_grid_activar_plazas",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ]
+        },
+        {
+            "key": "field_mauswp_grid_activar_motor",
+            "label": "Usar filtro Motor",
+            "name": "activar_filtro_motor",
+            "type": "true_false",
+            "instructions": "Activa para aplicar motor por defecto.",
+            "default_value": 0,
+            "ui": 1,
             "conditional_logic": [
                 [
                     {
@@ -47,8 +134,43 @@
             "key": "field_mauswp_grid_filtro_motor",
             "label": "Filtrar por motor",
             "name": "filtro_motor",
-            "type": "text",
-            "instructions": "Introduce el valor exacto del campo \"motor\". Déjalo vacío para mostrar todos.",
+            "type": "select",
+            "instructions": "Selecciona motor o deja “Todos”. Puedes escribir para buscar.",
+            "choices": {
+                "": "Todos",
+                "Fiat Ducato 2.3 Multijet": "Fiat Ducato 2.3 Multijet",
+                "Fiat Ducato 2.3 JTD": "Fiat Ducato 2.3 JTD",
+                "Ford Transit": "Ford Transit"
+            },
+            "allow_custom": 1,
+            "search_placeholder": "Buscar motor...",
+            "default_value": "",
+            "ui": 1,
+            "ajax": 0,
+            "return_format": "value",
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_mauswp_grid_mostrar_filtros",
+                        "operator": "==",
+                        "value": "0"
+                    },
+                    {
+                        "field": "field_mauswp_grid_activar_motor",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ]
+        },
+        {
+            "key": "field_mauswp_grid_activar_marca",
+            "label": "Usar filtro Marca",
+            "name": "activar_filtro_marca",
+            "type": "true_false",
+            "instructions": "Activa para aplicar marca por defecto.",
+            "default_value": 0,
+            "ui": 1,
             "conditional_logic": [
                 [
                     {
@@ -63,14 +185,74 @@
             "key": "field_mauswp_grid_filtro_marca",
             "label": "Filtrar por marca",
             "name": "filtro_marca",
-            "type": "text",
-            "instructions": "Introduce el valor exacto del campo \"marca\". Déjalo vacío para mostrar todos.",
+            "type": "select",
+            "instructions": "Elige marca o deja “Todos”.",
+            "choices": {
+                "": "Todos",
+                "Campereve": "Campereve",
+                "Caravans International": "Caravans International",
+                "Eriba": "Eriba",
+                "Frankia": "Frankia",
+                "GIOTTI-LINE": "GIOTTI-LINE",
+                "Globecar": "Globecar",
+                "Moncayo": "Moncayo",
+                "Pla": "Pla",
+                "Possl": "Pössl",
+                "Sunliving": "Sunliving",
+                "TEC": "TEC",
+                "Trigano": "Trigano",
+                "Arca": "Arca",
+                "Hobby": "Hobby",
+                "Joint": "Joint",
+                "LMC": "LMC",
+                "Niesmann + Bischoff": "Niesmann + Bischoff",
+                "Notin": "Notin",
+                "Roller Team": "Roller Team",
+                "Weinsberg": "Weinsberg",
+                "C. INTERNATIONAL": "C. INTERNATIONAL",
+                "Elnagh": "Elnagh",
+                "ETRVSCO": "ETRVSCO",
+                "Mooveo": "Mooveo",
+                "Knaus": "Knaus",
+                "Rimor": "Rimor",
+                "ESTEREL": "ESTEREL",
+                "EURAMOBIL": "EURAMOBIL",
+                "Laika": "Laika",
+                "Mobilvetta": "Mobilvetta",
+                "Itineo": "Itineo",
+                "Sunlight": "Sunlight",
+                "Carado": "Carado",
+                "Carthago": "Carthago",
+                "Le voyageur": "Le voyageur",
+                "Benimar": "Benimar",
+                "Fleurette": "Fleurette",
+                "Dethleffs": "Dethleffs",
+                "Autostar": "Autostar",
+                "Adria": "Adria",
+                "Mc Louis": "Mc Louis",
+                "Hymer": "Hymer",
+                "Bavaria": "Bavaria",
+                "Challenger": "Challenger",
+                "Buerstner": "Bürstner",
+                "Chausson": "Chausson",
+                "Pilote": "Pilote",
+                "Rapido": "Rapido"
+            },
+            "default_value": "",
+            "ui": 1,
+            "ajax": 0,
+            "return_format": "value",
             "conditional_logic": [
                 [
                     {
                         "field": "field_mauswp_grid_mostrar_filtros",
                         "operator": "==",
                         "value": "0"
+                    },
+                    {
+                        "field": "field_mauswp_grid_activar_marca",
+                        "operator": "==",
+                        "value": "1"
                     }
                 ]
             ]

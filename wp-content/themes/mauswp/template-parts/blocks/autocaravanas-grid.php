@@ -9,11 +9,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once get_template_directory() . '/inc/autocaravanas-card.php';
 
-$show_filters = (bool) get_field( 'mostrar_filtros' );
-$filter_tipo  = $show_filters ? '' : ( get_field( 'filtro_tipo' ) ?: '' );
-$filter_plazas = $show_filters ? '' : ( get_field( 'filtro_plazas' ) ?: '' );
-$filter_motor = $show_filters ? '' : ( get_field( 'filtro_motor' ) ?: '' );
-$filter_marca = $show_filters ? '' : ( get_field( 'filtro_marca' ) ?: '' );
+$show_filters_button = (bool) get_field( 'mostrar_boton_filtros' );
+
+$use_tipo   = (bool) get_field( 'activar_filtro_tipo' );
+$use_plazas = (bool) get_field( 'activar_filtro_plazas' );
+$use_motor  = (bool) get_field( 'activar_filtro_motor' );
+$use_marca  = (bool) get_field( 'activar_filtro_marca' );
+
+$filter_tipo   = $use_tipo ? ( get_field( 'filtro_tipo' ) ?: '' ) : '';
+$filter_plazas = $use_plazas ? ( get_field( 'filtro_plazas' ) ?: '' ) : '';
+$filter_motor  = $use_motor ? ( get_field( 'filtro_motor' ) ?: '' ) : '';
+$filter_marca  = $use_marca ? ( get_field( 'filtro_marca' ) ?: '' ) : '';
 $incluir_vendidas = (bool) get_field( 'incluir_vendidas' );
 
 $hide_sold = ! $incluir_vendidas;
@@ -102,7 +108,7 @@ $block_id = 'autocaravanas-grid-' . ( $block['id'] ?? wp_generate_uuid4() );
 					?>
 				</div>
 
-				<?php if ( $show_filters ) : ?>
+				<?php if ( $show_filters_button ) : ?>
 					<button type="button" class="inline-flex items-center gap-2 rounded-lg border-2 border-[#1A2250] px-4 py-2 text-base font-semibold text-[#1A2250] transition hover:bg-[#1A2250] hover:text-white">
 						<span><?php esc_html_e( 'Filtros', 'mauswp' ); ?></span>
 						<span aria-hidden="true">
