@@ -1,0 +1,14 @@
+{
+  "key": "group_mauswp_header",
+  "title": "Header",
+  "fields": [
+    { "key": "field_header_logo", "label": "Logo header", "name": "header_logo", "type": "image", "return_format": "array", "preview_size": "medium", "library": "all" },
+    { "key": "field_header_comparador_link", "label": "Enlace botón comparador", "name": "header_comparador_link", "type": "url", "placeholder": "https://..." }
+  ],
+  "location": [[{ "param": "options_page", "operator": "==", "value": "mauswp-header" }]],
+  "position": "normal",
+  "style": "default",
+  "label_placement": "top",
+  "instruction_placement": "label",
+  "active": true
+}

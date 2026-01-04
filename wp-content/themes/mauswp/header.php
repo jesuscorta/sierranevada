@@ -30,7 +30,7 @@ $comparador_url  = $comparador_link ?: '#';
 					<?php
 					wp_nav_menu(
 						array(
-							'theme_location' => 'header_topbar',
+							'theme_location' => 'topbar',
 							'container'      => '',
 							'menu_class'     => 'topbar-menu',
 							'fallback_cb'    => '__return_empty_string',
@@ -60,7 +60,7 @@ $comparador_url  = $comparador_link ?: '#';
 					if ( ! empty( $header_logo['url'] ) ) {
 						?>
 						<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="block">
-							<img src="<?php echo esc_url( $header_logo['url'] ); ?>" alt="<?php echo esc_attr( $header_logo['alt'] ?? get_bloginfo( 'name' ) ); ?>" class="h-[62px] w-auto max-w-[266px]" loading="lazy" decoding="async" />
+							<img src="<?php echo esc_url( $header_logo['url'] ); ?>" alt="<?php echo esc_attr( $header_logo['alt'] ?? get_bloginfo( 'name' ) ); ?>" class="h-[62px] w-auto max-w-[270px]" loading="lazy" decoding="async" />
 						</a>
 						<?php
 					} elseif ( function_exists( 'the_custom_logo' ) && has_custom_logo() ) {
@@ -120,7 +120,7 @@ $comparador_url  = $comparador_link ?: '#';
 					if ( ! empty( $header_logo['url'] ) ) {
 						?>
 						<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="block">
-							<img src="<?php echo esc_url( $header_logo['url'] ); ?>" alt="<?php echo esc_attr( $header_logo['alt'] ?? get_bloginfo( 'name' ) ); ?>" class="h-[52px] w-auto max-w-[220px]" loading="lazy" decoding="async" />
+							<img src="<?php echo esc_url( $header_logo['url'] ); ?>" alt="<?php echo esc_attr( $header_logo['alt'] ?? get_bloginfo( 'name' ) ); ?>" class="h-[52px] w-auto max-w-[270px]" loading="lazy" decoding="async" />
 						</a>
 						<?php
 					} elseif ( function_exists( 'the_custom_logo' ) && has_custom_logo() ) {
@@ -184,7 +184,7 @@ $comparador_url  = $comparador_link ?: '#';
 						<?php
 						wp_nav_menu(
 							array(
-								'theme_location' => 'header_topbar',
+								'theme_location' => 'topbar',
 								'container'      => '',
 								'menu_class'     => 'mobile-topbar-menu',
 								'fallback_cb'    => '__return_empty_string',
