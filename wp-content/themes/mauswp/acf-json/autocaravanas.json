@@ -1,0 +1,39 @@
+{
+    "key": "group_mauswp_autocaravanas",
+    "title": "Página Autocaravanas",
+    "fields": [
+        {
+            "key": "field_mauswp_autocaravanas_intro",
+            "label": "Introducción",
+            "name": "introduccion",
+            "type": "textarea",
+            "instructions": "Texto breve que aparece bajo el título.",
+            "required": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "maxlength": "",
+            "rows": 3,
+            "new_lines": "wpautop"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page_template",
+                "operator": "==",
+                "value": "page-autocaravanas.php"
+            }
+        ]
+    ],
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "show_in_rest": 0
+}
