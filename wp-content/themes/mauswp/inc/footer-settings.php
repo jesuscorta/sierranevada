@@ -46,6 +46,16 @@ function mauswp_register_footer_options_page() {
 			'capability'  => 'manage_options',
 		]
 	);
+
+	acf_add_options_sub_page(
+		[
+			'page_title'  => __( 'Autocaravana', 'mauswp' ),
+			'menu_title'  => __( 'Autocaravana', 'mauswp' ),
+			'parent_slug' => 'mauswp-theme-options',
+			'menu_slug'   => 'mauswp-autocaravana',
+			'capability'  => 'manage_options',
+		]
+	);
 }
 add_action( 'acf/init', 'mauswp_register_footer_options_page' );
 

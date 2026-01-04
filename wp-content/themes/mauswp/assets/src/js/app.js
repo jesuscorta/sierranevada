@@ -401,6 +401,39 @@ const initHeroTimelineSlider = () => {
   });
 };
 
+const initAutocaravanaGallery = () => {
+  const mainMedia = document.querySelector('[data-auto-main-media]');
+  const thumbs = document.querySelectorAll('[data-auto-thumb]');
+  if (!mainMedia || !thumbs.length) return;
+
+  thumbs.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const type = btn.dataset.type;
+      const url = btn.dataset.url;
+      const alt = btn.dataset.alt || '';
+      if (!type || !url) return;
+
+      mainMedia.innerHTML = '';
+      if (type === 'video') {
+        const iframe = document.createElement('iframe');
+        iframe.src = url;
+        iframe.loading = 'lazy';
+        iframe.allowFullscreen = true;
+        iframe.className = 'h-full w-full';
+        mainMedia.appendChild(iframe);
+      } else {
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = alt;
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.className = 'h-full w-full object-cover';
+        mainMedia.appendChild(img);
+      }
+    });
+  });
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   initHeroVideoLazy();
@@ -410,4 +443,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initTrustindexHeaderAlign();
   initHeroTimelineSlider();
   initAutocaravanasLoadMore();
+  initAutocaravanaGallery();
 });

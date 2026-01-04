@@ -1,0 +1,65 @@
+{
+    "key": "group_mauswp_autocaravana_opciones",
+    "title": "Opciones Autocaravana",
+    "fields": [
+        {
+            "key": "field_mauswp_auto_info_title",
+            "label": "Título bloque info",
+            "name": "auto_info_title",
+            "type": "text",
+            "default_value": "",
+            "ui": 0
+        },
+        {
+            "key": "field_mauswp_auto_info_content",
+            "label": "Contenido bloque info",
+            "name": "auto_info_content",
+            "type": "wysiwyg",
+            "tabs": "all",
+            "toolbar": "basic",
+            "media_upload": 0,
+            "delay": 0
+        },
+        {
+            "key": "field_mauswp_auto_financia_text",
+            "label": "Texto financia (sidebar)",
+            "name": "auto_financia_text",
+            "type": "text",
+            "instructions": "Ejemplo: \"financia desde 448 €/mes\"",
+            "default_value": ""
+        },
+        {
+            "key": "field_mauswp_auto_tab_financiacion",
+            "label": "Tab Financiación",
+            "name": "auto_tab_financiacion",
+            "type": "wysiwyg",
+            "toolbar": "full",
+            "media_upload": 1,
+            "delay": 0
+        },
+        {
+            "key": "field_mauswp_auto_tab_contacto",
+            "label": "Tab Contacto",
+            "name": "auto_tab_contacto",
+            "type": "wysiwyg",
+            "toolbar": "full",
+            "media_upload": 1,
+            "delay": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "mauswp-autocaravana"
+            }
+        ]
+    ],
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "show_in_rest": 0
+}
