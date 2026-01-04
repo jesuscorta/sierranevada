@@ -103,32 +103,30 @@ $footer_social = [
 		</div>
 
 		<div class="mt-10 border-t border-slate-500/40 pt-6">
-			<div class="grid grid-cols-1 gap-4 md:[grid-template-columns:minmax(0,1fr)_auto] md:items-center">
-				<div class="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
-					<div class="text-sm text-slate-200">
-						<?php
-						if ( $footer_bottom_text ) {
-							echo wp_kses_post( wpautop( $footer_bottom_text ) );
-						} else {
-							printf(
-								'&copy; %1$s %2$s',
-								esc_html( date_i18n( 'Y' ) ),
-								esc_html( get_bloginfo( 'name' ) )
-							);
-						}
-						?>
-					</div>
-
+			<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+				<div class="text-sm text-slate-200">
 					<?php
-					$legal_menu = mauswp_render_footer_menu(
-						'footer_legal',
-						'mt-1 md:mt-0 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-slate-200'
-					);
-					if ( $legal_menu ) {
-						echo wp_kses_post( $legal_menu );
+					if ( $footer_bottom_text ) {
+						echo wp_kses_post( wpautop( $footer_bottom_text ) );
+					} else {
+						printf(
+							'&copy; %1$s %2$s',
+							esc_html( date_i18n( 'Y' ) ),
+							esc_html( get_bloginfo( 'name' ) )
+						);
 					}
 					?>
 				</div>
+
+				<?php
+				$legal_menu = mauswp_render_footer_menu(
+					'footer_legal',
+					'flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-slate-200'
+				);
+				if ( $legal_menu ) {
+					echo wp_kses_post( $legal_menu );
+				}
+				?>
 
 				<?php if ( array_filter( $footer_social ) ) : ?>
 					<div class="flex items-center gap-4 md:justify-end">
