@@ -54,16 +54,35 @@ if ( $galeria && is_array( $galeria ) ) {
 }
 
 if ( $video_youtube ) {
-	$media_items[] = [
-		'type' => 'video',
-		'url'  => $video_youtube,
-		'thumb' => '',
-	];
+	$yt = mauswp_convert_youtube_embed( $video_youtube );
+	if ( $yt ) {
+		$media_items[] = [
+			'type'  => 'video',
+			'url'   => $yt['embed'],
+			'thumb' => $yt['thumb'],
+			'alt'   => get_the_title( $post_id ),
+		];
+	}
 }
 
 // Prioriza imagen principal (si no hay, usa placeholder).
 $main_media = $media_items[0] ?? null;
-$placeholder = get_template_directory_uri() . '/assets/img/img-placeholder.png';
+$thumb_items = $media_items;
+if ( $media_items ) {
+	$videos = array_filter(
+		$media_items,
+		function( $item ) {
+			return isset( $item['type'] ) && 'video' === $item['type'];
+		}
+	);
+	$images = array_filter(
+		$media_items,
+		function( $item ) {
+			return ! isset( $item['type'] ) || 'image' === $item['type'];
+		}
+	);
+	$thumb_items = array_merge( $videos, $images );
+}
 ?>
 
 <main class="bg-[#F1F5F9] pt-24 pb-16 md:pt-28">
@@ -103,17 +122,17 @@ $placeholder = get_template_directory_uri() . '/assets/img/img-placeholder.png';
 						<div class="overflow-hidden rounded-2xl bg-white shadow-md">
 							<div class="swiper js-auto-gallery-main relative aspect-[16/9] bg-slate-100">
 								<div class="swiper-wrapper">
-									<?php if ( $media_items ) : ?>
-										<?php foreach ( $media_items as $media ) : ?>
-											<div class="swiper-slide">
-												<?php if ( 'video' === $media['type'] ) : ?>
-													<div class="h-full w-full">
-														<iframe class="h-full w-full" src="<?php echo esc_url( $media['url'] ); ?>" allowfullscreen loading="lazy"></iframe>
-													</div>
-												<?php else : ?>
-													<img src="<?php echo esc_url( $media['url'] ); ?>" alt="<?php echo esc_attr( $media['alt'] ); ?>" class="h-full w-full object-cover" loading="lazy" decoding="async" />
-												<?php endif; ?>
-											</div>
+								<?php if ( $media_items ) : ?>
+									<?php foreach ( $media_items as $media ) : ?>
+										<div class="swiper-slide">
+											<?php if ( 'video' === $media['type'] ) : ?>
+												<div class="h-full w-full">
+														<iframe class="h-full w-full" src="<?php echo esc_url( $media['url'] ); ?>" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+												</div>
+											<?php else : ?>
+												<img src="<?php echo esc_url( $media['url'] ); ?>" alt="<?php echo esc_attr( $media['alt'] ); ?>" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+											<?php endif; ?>
+										</div>
 										<?php endforeach; ?>
 									<?php else : ?>
 										<div class="swiper-slide">
@@ -124,17 +143,21 @@ $placeholder = get_template_directory_uri() . '/assets/img/img-placeholder.png';
 							</div>
 						</div>
 
-						<?php if ( $media_items ) : ?>
+						<?php if ( $thumb_items ) : ?>
 							<div class="swiper js-auto-gallery-thumbs">
 								<div class="swiper-wrapper">
-									<?php foreach ( $media_items as $media ) : ?>
+									<?php foreach ( $thumb_items as $media ) : ?>
 										<div class="swiper-slide !w-auto">
 											<div class="relative h-20 w-32 overflow-hidden rounded-lg border border-slate-200 bg-white">
 												<?php if ( 'video' === $media['type'] ) : ?>
 													<span class="absolute inset-0 z-10 flex items-center justify-center bg-slate-900/40 text-white">
 														<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
 													</span>
-													<div class="h-full w-full bg-slate-200"></div>
+													<?php if ( ! empty( $media['thumb'] ) ) : ?>
+														<img src="<?php echo esc_url( $media['thumb'] ); ?>" alt="<?php echo esc_attr( $media['alt'] ?? '' ); ?>" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+													<?php else : ?>
+														<div class="h-full w-full bg-slate-200"></div>
+													<?php endif; ?>
 												<?php elseif ( ! empty( $media['thumb'] ) ) : ?>
 													<img src="<?php echo esc_url( $media['thumb'] ); ?>" alt="<?php echo esc_attr( $media['alt'] ?? '' ); ?>" class="h-full w-full object-cover" loading="lazy" decoding="async" />
 												<?php else : ?>
@@ -282,3 +305,38 @@ $placeholder = get_template_directory_uri() . '/assets/img/img-placeholder.png';
 </main>
 
 <?php get_footer(); ?>
+$placeholder = get_template_directory_uri() . '/assets/img/img-placeholder.png';
+
+/**
+ * Convierte URL de YouTube a embed y thumb.
+ */
+function mauswp_convert_youtube_embed( string $url ): array {
+	$video_id = '';
+	$parsed   = wp_parse_url( $url );
+
+	if ( empty( $parsed['host'] ) ) {
+		return [];
+	}
+
+	if ( strpos( $parsed['host'], 'youtu.be' ) !== false && ! empty( $parsed['path'] ) ) {
+		$video_id = ltrim( $parsed['path'], '/' );
+	} elseif ( strpos( $parsed['host'], 'youtube.com' ) !== false ) {
+		if ( ! empty( $parsed['path'] ) && strpos( $parsed['path'], '/embed/' ) === 0 ) {
+			$video_id = basename( $parsed['path'] );
+		} elseif ( ! empty( $parsed['query'] ) ) {
+			parse_str( $parsed['query'], $qs );
+			if ( ! empty( $qs['v'] ) ) {
+				$video_id = $qs['v'];
+			}
+		}
+	}
+
+	if ( ! $video_id ) {
+		return [];
+	}
+
+	return [
+		'embed' => sprintf( 'https://www.youtube.com/embed/%s?rel=0', rawurlencode( $video_id ) ),
+		'thumb' => sprintf( 'https://img.youtube.com/vi/%s/hqdefault.jpg', rawurlencode( $video_id ) ),
+	];
+}
