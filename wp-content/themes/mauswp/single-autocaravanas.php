@@ -142,21 +142,21 @@ $placeholder = get_template_directory_uri() . '/assets/img/img-placeholder.png';
 
 					<div class="space-y-4">
 						<div class="flex flex-wrap items-center gap-6 border-b border-transparent text-base font-semibold text-slate-600">
-							<button class="tab-link text-[#1A2250]" data-auto-tab-target="financiacion"><?php esc_html_e( 'Financiación', 'mauswp' ); ?></button>
-							<button class="tab-link" data-auto-tab-target="ficha"><?php esc_html_e( 'Ficha técnica', 'mauswp' ); ?></button>
-							<button class="tab-link" data-auto-tab-target="vr"><?php esc_html_e( 'Foto 360º', 'mauswp' ); ?></button>
-							<button class="tab-link" data-auto-tab-target="contacto"><?php esc_html_e( 'Contacto', 'mauswp' ); ?></button>
+							<button type="button" class="tab-link text-[#1A2250]" data-auto-tab-target="financiacion"><?php esc_html_e( 'Financiación', 'mauswp' ); ?></button>
+							<button type="button" class="tab-link" data-auto-tab-target="ficha"><?php esc_html_e( 'Ficha técnica', 'mauswp' ); ?></button>
+							<button type="button" class="tab-link" data-auto-tab-target="vr"><?php esc_html_e( 'Foto 360º', 'mauswp' ); ?></button>
+							<button type="button" class="tab-link" data-auto-tab-target="contacto"><?php esc_html_e( 'Contacto', 'mauswp' ); ?></button>
 						</div>
 
 						<div class="space-y-4">
-							<div class="tab-panel rounded-2xl bg-white p-5 shadow-md" data-auto-tab="financiacion">
+							<div class="tab-panel rounded-2xl bg-white p-5 shadow-md" data-auto-tab="financiacion" id="financiacion">
 								<?php if ( $tab_financiacion ) : ?>
 									<?php echo wp_kses_post( $tab_financiacion ); ?>
 								<?php else : ?>
 									<p class="text-slate-600"><?php esc_html_e( 'Añade información de financiación desde las opciones del tema.', 'mauswp' ); ?></p>
 								<?php endif; ?>
 							</div>
-							<div class="tab-panel hidden rounded-2xl bg-white p-5 shadow-md" data-auto-tab="ficha">
+							<div class="tab-panel hidden rounded-2xl bg-white p-5 shadow-md" data-auto-tab="ficha" id="ficha">
 								<div class="grid grid-cols-1 gap-3 md:grid-cols-2">
 									<?php
 									$ficha_fields = [
@@ -197,14 +197,14 @@ $placeholder = get_template_directory_uri() . '/assets/img/img-placeholder.png';
 									</div>
 								<?php endif; ?>
 							</div>
-							<div class="tab-panel hidden rounded-2xl bg-white p-5 shadow-md" data-auto-tab="vr">
+							<div class="tab-panel hidden rounded-2xl bg-white p-5 shadow-md" data-auto-tab="vr" id="vr">
 								<?php if ( $shortcode_vr ) : ?>
 									<?php echo do_shortcode( $shortcode_vr ); ?>
 								<?php else : ?>
 									<p class="text-slate-600"><?php esc_html_e( 'Añade un shortcode VR para mostrar el 360º.', 'mauswp' ); ?></p>
 								<?php endif; ?>
 							</div>
-							<div class="tab-panel hidden rounded-2xl bg-white p-5 shadow-md" data-auto-tab="contacto">
+							<div class="tab-panel hidden rounded-2xl bg-white p-5 shadow-md" data-auto-tab="contacto" id="contacto">
 								<?php if ( $tab_contacto ) : ?>
 									<?php echo wp_kses_post( $tab_contacto ); ?>
 								<?php else : ?>
