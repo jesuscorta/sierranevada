@@ -29,6 +29,16 @@ function mauswp_register_footer_options_page() {
 
 	acf_add_options_sub_page(
 		[
+			'page_title'  => __( 'Header', 'mauswp' ),
+			'menu_title'  => __( 'Header', 'mauswp' ),
+			'parent_slug' => 'mauswp-theme-options',
+			'menu_slug'   => 'mauswp-header',
+			'capability'  => 'manage_options',
+		]
+	);
+
+	acf_add_options_sub_page(
+		[
 			'page_title'  => __( 'Footer', 'mauswp' ),
 			'menu_title'  => __( 'Footer', 'mauswp' ),
 			'parent_slug' => 'mauswp-theme-options',
