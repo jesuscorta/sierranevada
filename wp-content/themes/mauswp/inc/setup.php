@@ -19,6 +19,11 @@ function mauswp_setup() {
 		array(
 			'primary' => __( 'Menú principal', 'mauswp' ),
 			'topbar'  => __( 'Menú top bar', 'mauswp' ),
+			'footer_col_2' => __( 'Footer columna 2', 'mauswp' ),
+			'footer_col_3' => __( 'Footer columna 3', 'mauswp' ),
+			'footer_col_4' => __( 'Footer columna 4', 'mauswp' ),
+			'footer_col_5' => __( 'Footer columna 5', 'mauswp' ),
+			'footer_legal' => __( 'Footer legal', 'mauswp' ),
 		)
 	);
 

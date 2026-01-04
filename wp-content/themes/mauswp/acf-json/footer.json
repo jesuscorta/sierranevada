@@ -1,0 +1,37 @@
+{
+  "key": "group_mauswp_footer",
+  "title": "Footer",
+  "fields": [
+    { "key": "field_footer_logo", "label": "Logo", "name": "footer_logo", "type": "image", "return_format": "array", "preview_size": "medium", "library": "all" },
+    { "key": "field_footer_title_main", "label": "Título principal", "name": "footer_title_main", "type": "text" },
+    { "key": "field_footer_description", "label": "Descripción", "name": "footer_description", "type": "textarea", "new_lines": "wpautop" },
+    { "key": "field_footer_title_secondary", "label": "Título secundario", "name": "footer_title_secondary", "type": "text" },
+    { "key": "field_footer_text_secondary", "label": "Texto secundario", "name": "footer_text_secondary", "type": "textarea", "new_lines": "wpautop" },
+
+    { "key": "field_footer_col2_title", "label": "Título columna 2", "name": "footer_col2_title", "type": "text" },
+    { "key": "field_footer_col3_title", "label": "Título columna 3", "name": "footer_col3_title", "type": "text" },
+    { "key": "field_footer_col4_title", "label": "Título columna 4", "name": "footer_col4_title", "type": "text" },
+    { "key": "field_footer_col5_title", "label": "Título columna 5", "name": "footer_col5_title", "type": "text" },
+
+    { "key": "field_footer_bottom_text", "label": "Texto inferior", "name": "footer_bottom_text", "type": "textarea", "new_lines": "wpautop" },
+
+    { "key": "field_footer_facebook", "label": "URL Facebook", "name": "footer_facebook", "type": "url" },
+    { "key": "field_footer_instagram", "label": "URL Instagram", "name": "footer_instagram", "type": "url" },
+    { "key": "field_footer_youtube", "label": "URL YouTube", "name": "footer_youtube", "type": "url" }
+  ],
+  "location": [
+    [
+      {
+        "param": "options_page",
+        "operator": "==",
+        "value": "mauswp-footer"
+      }
+    ]
+  ],
+  "position": "normal",
+  "style": "default",
+  "label_placement": "top",
+  "instruction_placement": "label",
+  "active": true,
+  "show_in_rest": false
+}
