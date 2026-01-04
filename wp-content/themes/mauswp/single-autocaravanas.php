@@ -12,6 +12,45 @@ wp_enqueue_script( 'mauswp-swiper' );
 
 get_header();
 
+$placeholder = get_template_directory_uri() . '/assets/img/img-placeholder.png';
+
+if ( ! function_exists( 'mauswp_convert_youtube_embed' ) ) {
+	/**
+	 * Convierte URL de YouTube a embed y thumb.
+	 */
+	function mauswp_convert_youtube_embed( string $url ): array {
+		$video_id = '';
+		$parsed   = wp_parse_url( $url );
+
+		if ( empty( $parsed['host'] ) ) {
+			return [];
+		}
+
+		if ( strpos( $parsed['host'], 'youtu.be' ) !== false && ! empty( $parsed['path'] ) ) {
+			$video_id = ltrim( $parsed['path'], '/' );
+		} elseif ( strpos( $parsed['host'], 'youtube.com' ) !== false ) {
+			if ( ! empty( $parsed['path'] ) && strpos( $parsed['path'], '/embed/' ) === 0 ) {
+				$video_id = basename( $parsed['path'] );
+			} elseif ( ! empty( $parsed['query'] ) ) {
+				$qs = [];
+				parse_str( $parsed['query'], $qs );
+				if ( ! empty( $qs['v'] ) ) {
+					$video_id = $qs['v'];
+				}
+			}
+		}
+
+		if ( ! $video_id ) {
+			return [];
+		}
+
+		return [
+			'embed' => sprintf( 'https://www.youtube.com/embed/%s?rel=0', rawurlencode( $video_id ) ),
+			'thumb' => sprintf( 'https://img.youtube.com/vi/%s/hqdefault.jpg', rawurlencode( $video_id ) ),
+		];
+	}
+}
+
 $post_id = get_the_ID();
 
 $precio          = get_field( 'precio', $post_id );
