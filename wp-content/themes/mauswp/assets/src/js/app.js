@@ -300,6 +300,8 @@ const initHeroTimelineSlider = () => {
       direction: 'vertical',
       autoHeight: true,
       loop: true,
+      allowTouchMove: false,
+      simulateTouch: false,
       autoplay: {
         delay: 5000,
         disableOnInteraction: false,
